@@ -1,0 +1,7 @@
+.git
+.vscode
+.env
+node_modules
+dist
+./dabatase/server.json
+package-lock.json
