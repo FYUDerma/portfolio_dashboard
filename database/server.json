@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "dashboard-DB",
+      "Group": "Darshboard",
+      "Port": 5432,
+      "Username": "admin",
+      "Host": "dashboard-DB",
+      "MaintenanceDB": "dashboard",
+      "SSLMode": "prefer"
+    }
+  }
+}
