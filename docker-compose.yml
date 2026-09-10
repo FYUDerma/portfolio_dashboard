@@ -1,0 +1,44 @@
+services:
+  db:
+    container_name: dashboard-DB
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${dashboard_DATABASE_USER}
+      POSTGRES_PASSWORD: ${dashboard_DATABASE_PASSWORD}
+      POSTGRES_DB: ${dashboard_DATABASE_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./Database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${dashboard_DATABASE_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app_network
+  pgadmin:
+    container_name: dashboard-PGAdmin
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${dashboard_PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${dashboard_PGADMIN_PASSWORD}
+      PGADMIN_LISTEN_PORT: 80
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - ./Database/server.json:/pgadmin4/servers.json
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app_network
+
+volumes:
+  pgdata:
+
+networks:
+  app_network:
+    driver: bridge
