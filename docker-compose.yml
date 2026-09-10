@@ -1,7 +1,7 @@
 services:
   db:
     container_name: dashboard-DB
-    image: postgres
+    image: postgres:17-alpine
     ports:
       - "5432:5432"
     environment:
@@ -10,7 +10,7 @@ services:
       POSTGRES_DB: ${dashboard_DATABASE_NAME}
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./Database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${dashboard_DATABASE_NAME}"]
       interval: 10s
@@ -29,7 +29,7 @@ services:
       PGADMIN_LISTEN_PORT: 80
       PGADMIN_CONFIG_SERVER_MODE: "False"
     volumes:
-      - ./Database/server.json:/pgadmin4/servers.json
+      - ./database/server.json:/pgadmin4/servers.json
     depends_on:
       db:
         condition: service_healthy
