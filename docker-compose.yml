@@ -9,10 +9,10 @@ services:
       POSTGRES_PASSWORD: ${dashboard_DATABASE_PASSWORD}
       POSTGRES_DB: ${dashboard_DATABASE_NAME}
     volumes:
-      - pgdata:/var/lib/postgresql/data
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${dashboard_DATABASE_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U ${dashboard_DATABASE_USER} -d ${dashboard_DATABASE_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
